@@ -1,2 +1,83 @@
-# MinOCA
-Learning DROCA using polynomially many queries using a SAT solver
+##########################################################################################
+MinOCA : Learning DROCA using polynomially many queries using a SAT solver
+Author: Prince Mathew
+##########################################################################################
+
+##########################################################################################
+File Organisation:
+##########################################################################################
+
+The folder ./Datasets/ contains the two datasets (Dataset1 and Dataset1) used for experiments.
+	./Datasets/Dataset1/: contains the inputs used to compare MinOCA and BPS. Here, the final states can be reached only by a zero test.
+	./Dataset2/Dataset2/: contains the inputs used to evaluate the performance of MinOCA. The notion of acceptance is by final state.
+The folder ./ResultsCSV/ contains the results of experiments on both datasets.
+	./ResultsCSV/Dataset1/BPS/ : contains the results of experiments on BPS using Dataset1.
+	./ResultsCSV/Dataset1/MinOCA/ : contains the results of experiments on MinOCA using Dataset1.
+	./ResultsCSV/Dataset2/MinOCA/ : contains the results of experiments on MinOCA using Dataset2.
+
+The folder ./MinOCA_Implementation/ contains the Python implementation of MinOCA.
+The folder ./MinOCA_Implementation/inputs/ is initially empty and will have the random DROCAs generated using the code.
+The outputs of experiments will be stored in the folder ./MinOCA_Implementation/outputs/ as a .csv file.
+A representative sample of the inputs used to compare MinOCA and BPS is provided in the folder ./MinOCA_Implementation/TestCases/Representative_Sample/.
+A set of inputs containing 10 known DROCAs are given in the folder ./MinOCA_Implementation/TestCases/Known/.
+The folder ./MinOCA_Implementation/TestCases/Trash/ will contain the intermediate files generated such as the .dot image of the final DROCA, if drawn. 
+
+The files acyclic.py, minimiser.py, hopcroft.py, sdfa.py, strunion.py and dfaminer.py in the folder ./MinOCA_Implementation/ are part of the DFAMiner tool that finds the minimal separating DFA (https://github.com/liyong31/DFAMiner) Copyright (c) 2024 Yong Li.
+
+
+The implementation of MinOCA is contained in the file ./MinOCA_Implementation/minOCA.py
+
+##########################################################################################
+Running the code:
+##########################################################################################
+
+Instructions.
+1. Open your terminal/command prompt and navigate to the directory MinOCA_Implementation/
+2. Execute the following command: python LearningDROCA.py
+3. Follow the on-screen instructions based on your requirements.
+ 
+
+######################################### Additional Information ###############################
+
+##########################################################################################
+					  				Packages Needed
+##########################################################################################
+
+#The following Python packages are required to run the code
+. python-sat - SAT solver in Python
+. dfa - Used for converting dfa object to dictionary format and vice-versa
+. pydot - Used for generating and viewing the final OCA
+. graphviz - Graph visualisation software 
+
+Installation Instructions.
+Mac/Windows:
+pip install python-sat
+pip install dfa
+pip install pydot
+pip install graphviz
+
+
+Note: Make sure that the directory in which you have installed the package is added to your systems environment variable PATH.
+
+Alternative:
+Mac:
+Installation command: brew install graphviz
+
+Windows:
+Download the Graphviz installer from https://graphviz.org/download/ and install it.
+32-bit: https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/2.49.0/stable_windows_10_cmake_Release_Win32_graphviz-install-2.49.0-win32.exe
+64-bit: https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/2.49.0/stable_windows_10_cmake_Release_x64_graphviz-install-2.49.0-win64.exe
+
+##########################################################################################
+								  Optional Package
+##########################################################################################
+
+					
+#The package is needed only if you want to write the Hankel matrix in a file (i.e. if you are using the function PrintTableToFile).
+#Not currently needed
+. Pandas - open-source data analysis and manipulation tool
+Installation Instructions.
+
+Mac/Windows:
+pip install pandas
+
