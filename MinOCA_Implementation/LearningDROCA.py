@@ -1,8 +1,9 @@
-#from GenerateSamples import GenerateSamples
+# Importing packages
 import minOCA as Learner
 import os
 import sys
 import datetime
+from collections import deque
 from ctypes import *
 import multiprocessing
 import time						
@@ -74,7 +75,7 @@ def GenerateSamples(Alphabet_size, No_States, max_Count):
         #Check for 'n' reachable states
         reachable=[]            #List to store the set of reachable states
 
-                                #Perform config graph search upto counter value (No_States)^2 using BFS of reachability.
+        #Perform config graph search upto counter value (No_States)^2 using BFS.
         configAddedToQueue=[(0,0)]
         queue=[(0,0)]
 
@@ -101,7 +102,7 @@ def GenerateSamples(Alphabet_size, No_States, max_Count):
 
 
         if(len(reachable)!= No_States):
-            continue                        #No: of reachable states is not No_States.
+            continue                        # Number of reachable states is not No_States.
         #Writing test case to file
 
         Lang_Name="Language_"+str(count)
@@ -127,6 +128,7 @@ def GenerateSamples(Alphabet_size, No_States, max_Count):
         fp.write("\n")
     fp.close()
 
+# Function to initialise a DROCA from the input file
 def initFromFile(file):
     try:
         #file=minOCA.file
@@ -199,6 +201,7 @@ def initFromFile(file):
 
     return Learner.minOCA(Lang_name,No_States, Initial, Final_States, Alphabet, Transitions, modAlphabet)
 
+#Main Function 
 def main_function(file):
     filename=file.split("/")[-1]						# Getting the filename
     print(filename)
@@ -211,9 +214,6 @@ def main_function(file):
     file = open(Learner.inputPath+InputFileName, 'r')
     fp = open(Learner.resultFilePath+InputFileName+".csv", "w")
     fp.write("Lang_name, Total_time, #Equiv. Queries, LongestCounterExampleLength, |P|, |S|, NoStates, Sat_Time, Time_perSAT, AvgCounter_Example_Length, Total_Equiv_Time, Last_Equiv_Time, MaxNoEquiv, SuccessCount\n")
-        
-            
-
 
     #Reading first line - number of languages - from the input file
     try:
@@ -264,16 +264,13 @@ def main_function(file):
                         #PrintTableToFile()
                         lang.MakeConsistent()
                 
-                #if(lang.counterExample!='F' and closedConsistentFlag==0):  
-                #    print("CAREFULL: STILL CLOSED AND CONSISTENT")
                 #lang.PrintTableToFile()
                 currentTime=time.time()-begin  # Time elapsed
                 if(currentTime>=Learner.TimeOut*60):
                     fp.write(lang.Lang_name+", Time Out, "+str(currentTime)+"\n")
                     print("TimeOut")
                     break
-                #else:
-                #    print(currentTime)
+
                 print("Querying SAT solver")
                 Sat_begin=time.time()
                 remTime=Learner.TimeOut*60-currentTime # Remaining time for execution
@@ -291,14 +288,10 @@ def main_function(file):
                 lang.candidateCount+=1
                 start_time= time.time()
                 lang.counterExample='T'
-                #currentTime=time.time()-begin  # Do equivalence query if there is time
+
                 print("Starting equivalence check")
                 
-
-                #Old equivalence test by enumerating words
-                #lang.counterExample=lang.Check_Equivalence(start_time,my_dfa)
-                
-                #new equivalence test
+                # equivalence test
 
                 Equivalence_Count+=1
                 result_queue = multiprocessing.Queue()
@@ -326,8 +319,6 @@ def main_function(file):
                     # Get the result from the queue
                     resultEq = result_queue.get()
                     if(resultEq!=None):
-                        #print(result)
-                        #my_dfa= dfa.dict2dfa(result[0],result[1])
                         lang.counterExample,transitionDict,Init_state= resultEq
 
                         #print("equivalence check done")
@@ -343,7 +334,6 @@ def main_function(file):
                             Counter_Example_Length+=len(lang.counterExample)
                             
                             lang.AddAllValidPrefixes(lang.counterExample.lower())
-                            #closedConsistentFlag=0
                         else:  
                             Total_time=time.time()-begin
                             successCount+=1
@@ -396,13 +386,12 @@ def main_function(file):
 
 if __name__ == "__main__":
     sys.setrecursionlimit(pow(10,8))  #Setting recursion limit to a high value for dfa-identify.
-    #minOCA=Learner.minOCA()
+
     Learner.filePath='./Trash/'
    
     Learner.resultFilePath='./outputs/'
     Learner.TimeOut=5                                                  #Time-out for Learning
     Learner.testFlag=0 
-    #minOCA.setFilePaths('./inputs/','./Trash/','./outputs/')
 
     while True:
         print_menu()

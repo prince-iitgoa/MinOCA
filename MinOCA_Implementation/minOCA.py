@@ -6,6 +6,7 @@ import dfaminer as DFAM
 from collections import deque
 from collections import defaultdict
 
+#Classs minOCA
 class minOCA:
     #Class Variables
     filePath=""     # Path to store the graphs generated. Create a folder 'Trash' in your working directory
@@ -111,8 +112,6 @@ class minOCA:
                 counterActions.append('x')
                 counterActions.append(self.Transitions[transitionIndex][state][1])
         return counterActions
-
-    ########################
 
     #Function to check whether a given word over the modified alphabet has a valid run or not
     def IsValidWord(self,word):
@@ -325,30 +324,6 @@ class minOCA:
             #print(CounterAction, letter)
         self.FillTable()
         return
-
-
-    # Function to check equivalence for the SAT solver based solution
-    def Check_Equivalence(self,start_time,my_dfa):
-        modWord=''
-        while(time.time()-start_time < minOCA.TimeOut*10):
-            word=self.Queue.pop(0)
-            memb, counter, modWord, state= self.getMembershipCounter(word)
-            if(word=='ε'):
-                modWord=''
-            if(my_dfa.label(modWord)): #Check whether the word is accepted in the new automaon
-                if(memb!=1):
-                    #print(modWord+" 1")
-                    return modWord
-            else:
-                if(memb!=0):
-                    #print(word+", "+modWord+" 0")
-                    return modWord
-            for letter in self.Alphabet:
-                self.Queue.append(StringConcat(word,letter))
-        else:
-            print("Last word checked: "+modWord)
-        return 'T'
-
     
     #Function to check equivalence
     def NewExactEquivalenceTest(self, my_dfa, result_queue):
@@ -364,7 +339,6 @@ class minOCA:
         #Keeping track of counter actions from each state
         TransitionDict=dict()  
 
-        #NEW EQUI-CHECK IMPROVED
         # Precompute indices to avoid repeated calls to `.index`
         # Convert each action (list) to a tuple
         uniqueCounterActionsIndices = {tuple(action): i for i, action in enumerate(self.uniqueCounterActions)}
@@ -449,93 +423,6 @@ class minOCA:
         result_queue.put(['T', TransitionDict, Init_State])    
         return
 
-
-    def ExactEquivalenceTest(self, my_dfa):
-        Final_States=[]  
-        Transitions=[]  
-        power=4
-
-        from dfa import dfa2dict #, dict2dfa
-        dfa_dict, start = dfa2dict(my_dfa)
-        No_States= len(dfa_dict.keys())
-
-        for state in dfa_dict.keys():
-            if(dfa_dict[state][0]==True):
-                    Final_States.append(state)
-
-        #Keeping track of counter actions from each state
-        TransitionDict=dict()  
-        for word in self.HankelMatrix.keys():
-            #print(word)
-            if(word=='ε'):
-                newWord=''
-            else:
-                newWord=self.HankelMatrix[word][4]
-
-            dfaState=my_dfa.transition(newWord)
-                                    #modWord:[memb,counterAction,counter,state]
-            for letter in self.Alphabet:
-                letterIndex=self.Alphabet.index(letter)
-                if(self.HankelMatrix[word][2]==0): #counter zero
-                    if(not (dfaState,letter) in TransitionDict.keys()):
-                        TransitionDict.update({(dfaState,letter):[dfa_dict[dfaState][1][letter],self.HankelMatrix[word][1][letterIndex*2]]})
-                elif(self.HankelMatrix[word][2]>0): #counter positive
-                    if(not (dfaState,letter.upper()) in TransitionDict.keys()):
-                        TransitionDict.update({(dfaState,letter.upper()):[dfa_dict[dfaState][1][letter.upper()],self.HankelMatrix[word][1][letterIndex*2+1]]})
-
-        #print(TransitionDict)
-
-        for letter in self.Alphabet:
-            for i in range(2):
-                tempTrans=[]
-                alph=letter
-                if(i!=0):
-                    alph= letter.upper()
-                for state in range(No_States):                  
-                    if((state,alph) in TransitionDict.keys()):
-                        tempTrans.append(TransitionDict[(state,alph)])
-                    else:
-                        tempTrans.append([0,0]) #No transitions defined yet. add transition to initial state with counter action 0
-                Transitions.append(tempTrans)
-
-        print("Constructing configuration graphs upto depth", pow(self.No_States,power))
-        #Construct configuration graph of the oca the teacher has - upto depth n^6
-        new_dfa1= NewGetConfigGraph(self.No_States, self.Initial, self.Final_States, self.Alphabet, self.Transitions, pow(self.No_States,power))#pow(self.No_States,3)*pow(No_States,3))
-        dfa1= Dfa.from_state_setup(new_dfa1)
-        #print("Done1")
-        #Construct configuration graph of the oca the learner have learnt - upto depth n^6
-        new_dfa2= NewGetConfigGraph(No_States, 0, Final_States, self.Alphabet, Transitions, pow(self.No_States,power))#pow(self.No_States,3)*pow(No_States,3))
-        dfa2= Dfa.from_state_setup(new_dfa2)
-        #print("Done2")
-        print("Checking equivalence of configuration graphs")
-        word= bisimilar(dfa1, dfa2, return_cex=True)
-        #print(word)
-        
-        if(word== None or len(word)>pow(self.No_States,power)*2):# or len(word)>(pow(self.No_States,3)*pow(No_States,3))*2):
-            return 'T'
-        else:
-
-            counterExample=''
-            if(not word): #epsilon
-                return counterExample
-            else:
-                count=0
-                modWord=''.join(word)
-                #convering into aAABBBaA form...
-
-                for i in range(len(modWord)):
-                    if(i%2==0):
-                        if(count==0):
-                            counterExample+=modWord[i] 
-                        else:
-                            counterExample+=modWord[i].upper()
-                    else:
-                        if(modWord[i]=='+'):
-                            count+=1
-                        elif(modWord[i]=='-'):
-                            count-=1
-            return counterExample
-
     # Function to Construct automaton from observations using SAT solver            
     def HankelToAutomaton(self,remTime):
         accepting=[]
@@ -574,12 +461,8 @@ class minOCA:
                         NumWordCopy=NumberWord[:]
                         NumWordCopy.append(len(self.modAlphabet)+newLetterIndex)
                         rejecting.append(NumWordCopy)
-                        #becoming more than 26 - need to find another way (fixed) - using unicode instead of ASCII now.
-
         #print(accepting)
         #print(rejecting)
-        #print("Hi 1")
-        #my_dfa= None
         try:
             result_queue = multiprocessing.Queue()
             # Create the process
@@ -602,43 +485,13 @@ class minOCA:
                 # Get the result from the queue
                 resultSDFA = result_queue.get()
                 if(resultSDFA!=None):
-                    #print(result)
-                    #my_dfa= dfa.dict2dfa(result[0],result[1])
                     return resultSDFA
 
-
-            #Old implementation with timer
-            '''
-            one_second_timeout = functools.partial(handler, 1)
-            old_handler = signal.signal(signal.SIGALRM, one_second_timeout)
-            signal.alarm(60*minOCA.TimeOut)
-            #signal.signal(signal.SIGALRM, handler)
-
-            # Set a timer for 'Timeout'  minutes
-            #signal.alarm(60*minOCA.TimeOut) 
-            try:
-                try:
-                    my_dfa = run_find_dfa(accepting=accepting, rejecting=rejecting)
-                #except TimeoutError as e:
-                except OurTimeout:
-                    print("SAT solver did not return within "+str(minOCA.TimeOut)+" minutes, continuing execution...")
-                finally:
-                    # Disable the alarm
-                    signal.alarm(0)
-            except:
-                print("Time-out")
-            '''
         except RecursionError as e:
             print("Maximum recursion depth exceeded")
-        
-        #print("Hi 2")
-        #write_dot(my_dfa,minOCA.filePath+"AutomatonTest_"+str(self.candidateCount)+".dot") 
-        #Display the created automaton
-        #from graphviz import Source
-        #path=minOCA.filePath+"AutomatonTest_"+str(self.candidateCount)+".dot"
-        #s= Source.from_file(path)
-        #s.view()
         return None 
+    
+    #Function to remove unnecessary transitions and draw the final automaton.
     def removeTransitions(self,transitionDict,Init_state,final_states,filePath):
         
         #print(transitionDict,Init_state,final_states)
@@ -716,6 +569,7 @@ def similarActions(listA,listB):
             return False
     return True
 
+#Function to get the configuration graph
 def NewGetConfigGraph(No_States, Initial, Final_States, Alphabet, Transitions, depth):
     new_dfa=dict()
     for j in range(depth+1):
@@ -754,6 +608,7 @@ def NewGetConfigGraph(No_States, Initial, Final_States, Alphabet, Transitions, d
             new_dfa.update({state_name:(final_flag,temp_transitions)})
     #print(new_dfa)
     return new_dfa
+
 #Function to get the configuration graph upto counter value 'depth' as a dfa over input alphabet {a0,a+,a-,b0,b+,b-}. 
 def GetConfigurationGraph(No_States, Initial, Final_States, Alphabet, Transitions, depth):
 
