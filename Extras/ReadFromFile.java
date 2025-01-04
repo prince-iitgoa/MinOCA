@@ -61,8 +61,8 @@ public class ReadFromFile {
     }
 
     public static void main(String[] args) throws IOException {
-        String inputPath= "/Users/prince/Documents/GitHub/LearningVOCA/implementation/Python/inputs/";
-        String outputPath="/Users/prince/Documents/GitHub/LearningVOCA/implementation/Python/ResultsCSV/Java/";
+        String inputPath= "./inputs/";
+        String outputPath="./ResultsCSV/";
         File folder = new File(inputPath);
         File[] fileList = folder.listFiles();
 
