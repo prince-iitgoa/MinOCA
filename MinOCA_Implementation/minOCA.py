@@ -518,10 +518,10 @@ class minOCA:
         fp.write("}")
         fp.close()
         #Display the created automaton
-        from graphviz import Source
-        path=filePath+self.Lang_name+"_Final_Automaton.dot"
-        s= Source.from_file(path)
-        s.view()
+        #from graphviz import Source
+        #path=filePath+self.Lang_name+"_Final_Automaton.dot"
+        #s= Source.from_file(path)
+        #s.view()
         return
 
 #Function to find minimal seperating DFA using DFAMiner

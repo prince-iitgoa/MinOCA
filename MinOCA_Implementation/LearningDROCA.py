@@ -451,7 +451,8 @@ if __name__ == "__main__":
                 print("Random DROCAs has been generated and saved in the folder './inputs'.")
         elif choice == '7':
             if Learner.testFlag==0:
-                print("Enabling this option will draw the learnt DROCA and save it in the folder './Trash/'.")
+                print("Enabling this option will write the learnt DROCA as a dot file and save it in the folder './Trash/'.")
+                print("One can use a graph visualisation software such as Graphviz to view to file as a graph")
                 print("This is not recommended when handling large sets of data")
                 confirm = input("Do you want to continue? (y/n): ")
                 if(confirm == 'y'):

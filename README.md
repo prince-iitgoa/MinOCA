@@ -3,6 +3,25 @@ MinOCA : Learning DROCA using polynomially many queries using a SAT solver
 Author: Prince Mathew
 ##########################################################################################
 
+
+
+##########################################################################################
+Running the code:
+##########################################################################################
+
+1. Open your terminal/command prompt and navigate to the directory containing this file. 
+	Alternatively, right click inside the folder containing this file and click "open in terminal".
+2. Execute the following command: pip3 install --no-index --find-links ./Packages/ -r requirements.txt
+	-- This will install the required packages to run the code (for Ubuntu 22.04.1 LTS running  Python 3.10.4). 
+3. Navigate to the directory ./MinOCA_Implementation/ by running the command: cd MinOCA_Implementation
+4. Execute the following command: python3 LearningDROCA.py
+5. Follow the on-screen instructions based on your requirements.
+
+
+Note: Create folders 'inputs' and 'Trash' inside the directory MinOCA_Implementation if not already present
+
+
+
 ##########################################################################################
 File Organisation:
 ##########################################################################################
@@ -24,18 +43,12 @@ The folder ./MinOCA_Implementation/TestCases/Trash/ will contain the intermediat
 
 The files acyclic.py, minimiser.py, hopcroft.py, sdfa.py, strunion.py and dfaminer.py in the folder ./MinOCA_Implementation/ are part of the DFAMiner tool that finds the minimal separating DFA (https://github.com/liyong31/DFAMiner) Copyright (c) 2024 Yong Li.
 
+The folder ./Extras contains the code used to run the inputs on BPS.
+The folder ./Packages/ contains the packages required to run the code on Ubuntu 22.04.1 LTS running Python 3.10.4
+The file ./requirements.txt contains the list of packages required.
 
 The implementation of MinOCA is contained in the file ./MinOCA_Implementation/minOCA.py
 
-##########################################################################################
-Running the code:
-##########################################################################################
-
-Instructions.
-1. Open your terminal/command prompt and navigate to the directory MinOCA_Implementation/
-2. Execute the following command: python LearningDROCA.py
-3. Follow the on-screen instructions based on your requirements.
- 
 
 ######################################### Additional Information ###############################
 
@@ -59,7 +72,16 @@ pip install graphviz
 
 Note: Make sure that the directory in which you have installed the package is added to your systems environment variable PATH.
 
-Alternative:
+##########################################################################################
+								  Optional Softwares 
+##########################################################################################
+
+Graphviz
+The code to view the graph while running the code is commented out for now. One can use this feature after installing Graphviz in your operating system. 
+
+Linux: 
+sudo apt-get install graphviz
+
 Mac:
 Installation command: brew install graphviz
 
@@ -68,11 +90,8 @@ Download the Graphviz installer from https://graphviz.org/download/ and install 
 32-bit: https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/2.49.0/stable_windows_10_cmake_Release_Win32_graphviz-install-2.49.0-win32.exe
 64-bit: https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/2.49.0/stable_windows_10_cmake_Release_x64_graphviz-install-2.49.0-win64.exe
 
-##########################################################################################
-								  Optional Package
-##########################################################################################
 
-					
+Pandas					
 #The package is needed only if you want to write the Hankel matrix in a file (i.e. if you are using the function PrintTableToFile).
 #Not currently needed
 . Pandas - open-source data analysis and manipulation tool
