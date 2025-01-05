@@ -16,7 +16,7 @@ import string
 #program to print a menu and ask the user to choose an option
 def print_menu():
     print("Menu:")
-    print("1. Run minOCA on a representative sample of the test data")
+    print("1. Run minOCA on a representative sample of Dataset1")
     print("2. Run minOCA on Dataset1")
     print("3. Run minOCA on Dataset2")
     print("4. Run minOCA on the test data in the 'inputs' folder")
@@ -398,7 +398,7 @@ if __name__ == "__main__":
         choice = input("Please choose an option (1-4): ")
         if choice == '1' or choice=='2' or choice=='3':
             if(choice=='1'):
-                Learner.inputPath='./TestCases/Representative_Sample/'
+                Learner.inputPath='./TestCases/Representative_SampleDS1/'
                 print("This operation will take approximately X minutes to complete.")
                 confirm= input("Do you want to continue? (y/n): ")
             elif(choice=='2'):

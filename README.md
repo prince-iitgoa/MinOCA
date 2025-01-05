@@ -25,9 +25,9 @@ Note: Create folders 'inputs' and 'Trash' inside the directory MinOCA_Implementa
 ##########################################################################################
 File Organisation:
 ##########################################################################################
-The file ./InputsFormat_ReadMe explains the format of the input specified.
 
 The folder ./Datasets/ contains the two datasets (Dataset1 and Dataset1) used for experiments.
+	The file ./Datasets/DatasetFormat_ReadMe explains the format of the input specified.
 	./Datasets/Dataset1/: contains the inputs used to compare MinOCA and BPS. Here, the final states can be reached only by a zero test.
 	./Dataset2/Dataset2/: contains the inputs used to evaluate the performance of MinOCA. The notion of acceptance is by final state.
 The folder ./ResultsCSV/ contains the results of experiments on both datasets.

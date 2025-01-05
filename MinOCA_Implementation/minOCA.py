@@ -1,3 +1,5 @@
+# Description: This file contains the implementation of the minOCA class which is used to find the minimal OCA for a given DROCA.
+# Author: Prince Mathew
 # Importing packages
 import time
 from ctypes import *
@@ -15,6 +17,7 @@ class minOCA:
     lang_counter=0
     
     @classmethod
+    #Function to set the file paths
     def setFilePaths(cls, inp, trash,output):
         cls.filePath=trash
         cls.inputPath=inp
@@ -22,10 +25,9 @@ class minOCA:
         return 
     
 
-    #Constructor Function    
+    #Constructor Function to initialize the minOCA object
     def __init__(self,langName, noStates, initial, final, alphabet, transitions, modAlph):
         
-        #minOCA.lang_counter+=1
         
         self.HankelMatrix={}         # Stores the Hankel matrix as a dictionary {(row.column):MembershipValue}
         self.Rows=['ε']              # Stores the row indices
@@ -42,6 +44,7 @@ class minOCA:
         self.Initial=initial          # Initial
         self.Final_States=final   # Final
         self.Alphabet=alphabet # Alphabet
+        
         #Transitions with counter actions
         self.Transitions = transitions     
         self.modAlphabet=modAlph
@@ -137,7 +140,7 @@ class minOCA:
                 i+=1
             return True
         
-    #Function to fill the table (automatically fills in the 'x' values)
+    #Function to fill the table with the given rows and columns
     def FillTable(self):
         for row in self.Rows:
             for entry in self.Columns:
@@ -198,7 +201,7 @@ class minOCA:
         print(data)
         return
 
-    # Function to check whether two rows are similar
+    # Function to check whether two rows are equal
     def IsEqual(self,x, y):
         for entry in self.Columns:
             if(self.HankelMatrix[StringConcat(x,entry)][0]!=self.HankelMatrix[StringConcat(y,entry)][0]):
@@ -223,7 +226,7 @@ class minOCA:
                     return False
         return True
 
-    #Function to check whether the table is closed
+    #Function to check whether the observation table is depth-closed
     def IsClosed(self):
         for extension in self.Rows:
             for letter in self.Alphabet:
@@ -239,7 +242,7 @@ class minOCA:
                         return False
         return True
 
-    #Function to make the Hankel matrix closed
+    #Function to make the observation table depth-closed
     def MakeClosed(self):
         while(not self.IsClosed()):
             for extension in self.Rows:
@@ -261,7 +264,7 @@ class minOCA:
 
             return
         
-    #Function to check whether the table is consistent. i.e., similar rows have similar extensions
+    #Function to check whether the observation table is depth-consistent. i.e., similar rows have similar extensions
     def IsConsistent(self):
         for entry in self.Rows:
             if(self.HankelMatrix[entry][2]<=self.depth):
@@ -276,13 +279,13 @@ class minOCA:
                                         return False
         return True
 
-    #Function to make the table is consistent. i.e., similar rows have similar extensions
+    #Function to make the observation table depth-consistent. i.e., similar rows have similar extensions
     def MakeConsistent(self):
         while(not self.IsConsistent()):
             self.MakeOneConsistent()
         return
 
-    #Function to rectify tsehe first inconsistency encountered
+    #Function to rectify the first inconsistency encountered
     def MakeOneConsistent(self):
         for entry in self.Rows:
             if(self.HankelMatrix[entry][2]<=self.depth):
@@ -379,15 +382,15 @@ class minOCA:
                         tempTrans.append([0,0]) #No transitions defined yet. add transition to initial state with counter action 0
                 Transitions.append(tempTrans)
 
-        #Faster Equivalence Check
+        
         queue = deque()  # Use deque for O(1) append and pop from the left
-        added = set()    # Use a set for faster lookups (O(1) average case)
+        added = set()    # Use a set for fast lookups (O(1) average case)
         word = ''
         queue.append((word, 0, Init_State, 0, 0))  # word, state1, state2, counter value, word length
         added.add((0, Init_State, 0))
 
         while queue:
-            configPair = queue.popleft()  # Dequeue efficiently with O(1)
+            configPair = queue.popleft()  # Dequeue 
             state1, state2, counter, word_length = configPair[1], configPair[2], configPair[3], configPair[4]
 
             # Check the condition for equivalence
@@ -491,7 +494,7 @@ class minOCA:
             print("Maximum recursion depth exceeded")
         return None 
     
-    #Function to remove unnecessary transitions and draw the final automaton.
+    #Function to remove unnecessary transitions and draw the final automaton and save as dot file.
     def removeTransitions(self,transitionDict,Init_state,final_states,filePath):
         
         #print(transitionDict,Init_state,final_states)
@@ -517,11 +520,14 @@ class minOCA:
                 fp.write("q_"+str(state)+" [shape=circle];\n")
         fp.write("}")
         fp.close()
+
         #Display the created automaton
-        #from graphviz import Source
-        #path=filePath+self.Lang_name+"_Final_Automaton.dot"
-        #s= Source.from_file(path)
-        #s.view()
+        #Uncomment the following block of code to display the automaton while running the code.
+        #Make sure you have graphviz installed in your system.
+        '''from graphviz import Source
+        path=filePath+self.Lang_name+"_Final_Automaton.dot"
+        s= Source.from_file(path)
+        s.view()'''
         return
 
 #Function to find minimal seperating DFA using DFAMiner
