@@ -8,12 +8,13 @@ Author: Prince Mathew
 ##########################################################################################
 Running the code:
 ##########################################################################################
+Copy the contents of this directory to your machine.
 
 1. Open your terminal/command prompt and navigate to the directory containing this file. 
-	Alternatively, right click inside the folder containing this file and click "open in terminal".
+	Alternatively, right click inside the folder containing this file and click "open in Terminal".
 2. Execute the following command: pip3 install --no-index --find-links ./Packages/ -r requirements.txt
 	-- This will install the required packages to run the code (for Ubuntu 22.04.1 LTS running  Python 3.10.4). 
-3. Navigate to the directory ./MinOCA_Implementation/ by running the command: cd MinOCA_Implementation
+3. Navigate to the directory ./MinOCA_Implementation/ by running the command: cd MinOCA_Implementation/
 4. Execute the following command: python3 LearningDROCA.py
 5. Follow the on-screen instructions based on your requirements.
 
