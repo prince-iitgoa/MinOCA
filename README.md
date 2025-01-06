@@ -2,8 +2,8 @@
 MinOCA : Learning DROCA using polynomially many queries using a SAT solver
 Author: Prince Mathew
 ##########################################################################################
-
-
+#Badges: Functional, Reusable, and Available 
+Link: 
 
 ##########################################################################################
 Running the code:
@@ -102,3 +102,5 @@ Installation Instructions.
 Mac/Windows:
 pip install pandas
 
+#Note
+We performed our experiments on an Apple M1 chip with 8GB of RAM, running macOS Sonoma Version 14.3. 
