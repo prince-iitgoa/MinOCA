@@ -416,13 +416,15 @@ if __name__ == "__main__":
                 for file in linux_format_list:
                     main_function(file)
                 print("The data corresponding to the learnt DROCAs has been saved in the folder './outputs/'.")
-
+                Learner.testFlag = 0
         elif choice == '4':
             Learner.inputPath='./inputs/'
             file_list=(glob.glob(Learner.inputPath+"*"))					
             linux_format_list= [path.replace('\\','/') for path in file_list]                                                 
             for file in linux_format_list:
                 main_function(file)
+            print("The data corresponding to the learnt DROCAs has been saved in the folder './outputs/'.")
+            Learner.testFlag = 0
         elif choice == '5':
             #minOCA("known", draw_automaton)
             Learner.inputPath='./TestCases/Known/'
@@ -431,6 +433,7 @@ if __name__ == "__main__":
             for file in linux_format_list:
                 main_function(file)
             print("The data corresponding to the learnt DROCAs has been saved in the folder './outputs/'.")
+            Learner.testFlag = 0
         elif choice == '6':
             Alphabet_size = int(input("Enter the alphabet size: "))
             No_States = int(input("Enter the number of states: "))
@@ -451,7 +454,7 @@ if __name__ == "__main__":
                 print("Random DROCAs has been generated and saved in the folder './inputs'.")
         elif choice == '7':
             if Learner.testFlag==0:
-                print("Enabling this option will write the learnt DROCA as a dot file and save it in the folder './Trash/'.")
+                print("Enabling this option will write the learnt DROCA as a dot file for the next set of inputs and save it in the folder './Trash/'.")
                 print("One can use a graph visualisation software such as Graphviz to view to file as a graph")
                 print("This is not recommended when handling large sets of data")
                 confirm = input("Do you want to continue? (y/n): ")
